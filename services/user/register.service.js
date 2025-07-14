@@ -17,7 +17,19 @@ module.exports = asyncHandler(async (req, res, next) => {
     experienceYears,
     countryCode,
   } = req.body;
-  const formattedPhone = validatePhone(phone, countryCode);
+
+  let formattedPhone;
+  try {
+    formattedPhone = validatePhone(phone, countryCode);
+  } catch (err) {
+    return next(new ApiError("Invalid phone number format", 400));
+  }
+
+  const existingUser = await UserModel.findOne({ phone: formattedPhone });
+  if (existingUser) {
+    return next(new ApiError("Phone number is already registered", 409));
+  }
+
   const newUser = await UserModel.create({
     displayName,
     phone: formattedPhone,
