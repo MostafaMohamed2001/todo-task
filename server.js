@@ -9,7 +9,7 @@ const globalError = require("./middlewares/error-response.middleware");
 const mountRoutes = require("./routes");
 
 dotenv.config();
-
+  
 const app = express();
 
 dbConnection();
