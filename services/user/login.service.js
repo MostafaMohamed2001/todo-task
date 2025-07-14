@@ -9,7 +9,7 @@ const generateTokens = require("../../utils/generate-token");
 const validatePhone = require("../../utils/validate-phone");
 
 module.exports = asyncHandler(async (req, res, next) => {
-  const { phone, password } = req.body;
+  const { phone, password,countryCode } = req.body;
 
   if (!phone || !password || !countryCode) {
     return next(

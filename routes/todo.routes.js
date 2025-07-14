@@ -9,12 +9,16 @@ const {
   findOneTodo,
 } = require("../services/todo");
 const { protect } = require("../services/user");
+const {
+  createTodoValidator,
+  updateTodoValidator,
+} = require("../utils/validators/todo.validator");
 
 router.use(protect);
 
 // @route   POST /api/v1/todos
 // @desc    Create a new todo
-router.post("/", createTodo);
+router.post("/", createTodoValidator, createTodo);
 
 // @route   GET /api/v1/todos
 // @desc    Get all todos
@@ -26,7 +30,7 @@ router.get("/:id", findOneTodo);
 
 // @route   PUT /api/v1/todos/:id
 // @desc    Update a todo by ID
-router.put("/:id", updateTodo);
+router.put("/:id", updateTodoValidator, updateTodo);
 
 // @route   DELETE /api/v1/todos/:id
 // @desc    Delete a todo by ID
