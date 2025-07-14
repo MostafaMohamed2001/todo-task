@@ -5,14 +5,22 @@ const ApiError = require("../../utils/apiError");
 const successResponse = require("../../utils/success-response");
 const sanitizeUser = require("../../utils/sanitize-user");
 const generateTokens = require("../../utils/generate-token");
+const validatePhone = require("../../utils/validate-phone");
 
 module.exports = asyncHandler(async (req, res, next) => {
-  const { displayName, phone, level, address, password, experienceYears } =
-    req.body;
-
-  const newUser = await UserModel.create({
+  const {
     displayName,
     phone,
+    level,
+    address,
+    password,
+    experienceYears,
+    countryCode,
+  } = req.body;
+  const formattedPhone = validatePhone(phone, countryCode);
+  const newUser = await UserModel.create({
+    displayName,
+    phone: formattedPhone,
     level,
     address,
     password,
