@@ -12,6 +12,8 @@ const { protect } = require("../services/user");
 const {
   createTodoValidator,
   updateTodoValidator,
+  getTodoValidator,
+  deleteTodoValidator,
 } = require("../utils/validators/todo.validator");
 
 router.use(protect);
@@ -26,7 +28,7 @@ router.get("/", listAllTodos);
 
 // @route   GET /api/v1/todos/id
 // @desc    Get one todo
-router.get("/:id", findOneTodo);
+router.get("/:id", getTodoValidator, findOneTodo);
 
 // @route   PUT /api/v1/todos/:id
 // @desc    Update a todo by ID
@@ -34,6 +36,6 @@ router.put("/:id", updateTodoValidator, updateTodo);
 
 // @route   DELETE /api/v1/todos/:id
 // @desc    Delete a todo by ID
-router.delete("/:id", deleteTodo);
+router.delete("/:id", deleteTodoValidator, deleteTodo);
 
 module.exports = router;

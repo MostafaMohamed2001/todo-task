@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 const validateMiddleware = require("../../middlewares/validate");
 const { priority } = require("../../config/constants");
 
@@ -38,6 +38,11 @@ exports.createTodoValidator = [
 ];
 
 exports.updateTodoValidator = [
+  param("id")
+    .notEmpty()
+    .withMessage("ToDo ID is required")
+    .isMongoId()
+    .withMessage("Invalid ToDo ID"),
   body("title")
     .optional()
     .isLength({ min: 3 })
@@ -68,5 +73,23 @@ exports.updateTodoValidator = [
       return true;
     }),
 
+  validateMiddleware,
+];
+
+exports.getTodoValidator = [
+  param("id")
+    .notEmpty()
+    .withMessage("ToDo ID is required")
+    .isMongoId()
+    .withMessage("Invalid ToDo ID format"),
+  validateMiddleware,
+];
+
+exports.deleteTodoValidator = [
+  param("id")
+    .notEmpty()
+    .withMessage("ToDo ID is required")
+    .isMongoId()
+    .withMessage("Invalid ToDo ID format"),
   validateMiddleware,
 ];
