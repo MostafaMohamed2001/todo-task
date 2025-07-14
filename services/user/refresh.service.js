@@ -10,10 +10,15 @@ module.exports = asyncHandler(async (req, res, next) => {
   const token = req.query.token;
 
   if (!token) {
-    return next(new ApiError("Refresh token is required", 401));
+    return next(new ApiError("Refresh token is required", 403));
   }
 
-  const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+  let decoded;
+  try {
+    decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+  } catch (err) {
+    return next(new ApiError("Refresh token is invalid or expired", 403));
+  }
 
   const user = await UserModel.findById(decoded.id);
   if (!user) {
@@ -24,7 +29,7 @@ module.exports = asyncHandler(async (req, res, next) => {
 
   return successResponse({
     res,
-    message: "Access token refreshed",
+    message: "Access token refreshed successfully",
     data: { accessToken },
   });
 });
